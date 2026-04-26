@@ -20,7 +20,7 @@ const IssueCard = ({ issue, onUpvote }) => {
       {/* Image */}
       {issue.imageUrl && (
         <img
-          src={`http://localhost:5000/${issue.imageUrl}`}
+          src={`https://civic-solver-backend.onrender.com/${issue.imageUrl}`}
           alt="issue"
           className="w-full h-48 object-cover"
         />
