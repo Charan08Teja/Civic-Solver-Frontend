@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import Button from "../components/Button";
+import CategoryBadge from "../components/CategoryBadge";
 
 function Admin() {
   const [issues, setIssues] = useState([]);
@@ -125,10 +126,11 @@ useEffect(() => {
                       <span>👍 {issue._count?.upvotes || 0} upvotes</span>
                     </div>
                   </div>
-                  <div className="mt-4 sm:mt-0 sm:ml-4">
+                  <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col space-y-2">
                     <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
                       {issue.status || 'OPEN'}
                     </span>
+                    {issue.category && <CategoryBadge category={issue.category} />}
                   </div>
                 </div>
 

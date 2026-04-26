@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import API from '../api/axios';
+import CategoryBadge from '../components/CategoryBadge';
 
 // Fix Leaflet default marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -12,14 +13,48 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Component to handle map centering
-function MapController({ center }) {
+// Component to handle map bounds fitting
+function FitBounds({ issues, userLocation, locateMe, setLocateMe }) {
   const map = useMap();
+
   useEffect(() => {
-    if (center) {
-      map.setView(center, 12);
+    if (locateMe && userLocation) {
+      map.setView(userLocation, 12);
+      setLocateMe(false); // Reset after centering
+      return;
     }
-  }, [center, map]);
+
+    if (issues.length === 0) {
+      // No issues, use default center
+      map.setView([17.385, 78.486], 12);
+      return;
+    }
+
+    if (issues.length === 1) {
+      // Single issue, center on it
+      const issue = issues[0];
+      const lat = parseFloat(issue.latitude);
+      const lng = parseFloat(issue.longitude);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        map.setView([lat, lng], 12);
+      }
+      return;
+    }
+
+    // Multiple issues, fit bounds
+    const bounds = issues
+      .map(issue => {
+        const lat = parseFloat(issue.latitude);
+        const lng = parseFloat(issue.longitude);
+        return !isNaN(lat) && !isNaN(lng) ? [lat, lng] : null;
+      })
+      .filter(coord => coord !== null);
+
+    if (bounds.length > 0) {
+      map.fitBounds(bounds, { padding: [20, 20], animate: true });
+    }
+  }, [issues, userLocation, locateMe, map, setLocateMe]);
+
   return null;
 }
 
@@ -27,8 +62,8 @@ function MapView() {
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [center, setCenter] = useState([17.385, 78.486]); // Fallback coordinates
   const [userLocation, setUserLocation] = useState(null);
+  const [locateMe, setLocateMe] = useState(false);
 
   useEffect(() => {
     // Get user location
@@ -36,12 +71,10 @@ function MapView() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setCenter([latitude, longitude]);
           setUserLocation([latitude, longitude]);
         },
         (error) => {
           console.warn('Geolocation error:', error);
-          // Keep fallback center
         }
       );
     }
@@ -50,7 +83,12 @@ function MapView() {
     const fetchIssues = async () => {
       try {
         const response = await API.get('/issues');
-        setIssues(response.data.filter(issue => issue.latitude && issue.longitude));
+        const validIssues = response.data.filter(issue => {
+          const lat = parseFloat(issue.latitude);
+          const lng = parseFloat(issue.longitude);
+          return !isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+        });
+        setIssues(validIssues);
       } catch (err) {
         setError('Failed to load issues');
         console.error('Error fetching issues:', err);
@@ -64,7 +102,7 @@ function MapView() {
 
   const handleLocateMe = () => {
     if (userLocation) {
-      setCenter(userLocation);
+      setLocateMe(true);
     } else {
       alert('User location not available');
     }
@@ -117,12 +155,10 @@ function MapView() {
 
           <div className="relative">
             <MapContainer
-              center={center}
-              zoom={12}
               style={{ height: '80vh', width: '100%' }}
               className="rounded-b-xl"
             >
-              <MapController center={center} />
+              <FitBounds issues={issues} userLocation={userLocation} locateMe={locateMe} setLocateMe={setLocateMe} />
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -131,7 +167,7 @@ function MapView() {
                 {issues.map((issue) => (
                   <Marker
                     key={issue.id}
-                    position={[issue.latitude, issue.longitude]}
+                    position={[parseFloat(issue.latitude), parseFloat(issue.longitude)]}
                   >
                     <Popup>
                       <div className="max-w-sm">
@@ -144,10 +180,11 @@ function MapView() {
                         )}
                         <h3 className="font-semibold text-gray-900 mb-2">{issue.title}</h3>
                         <p className="text-gray-600 text-sm mb-3">{issue.description}</p>
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(issue.status)}`}>
                             {issue.status}
                           </span>
+                          {issue.category && <CategoryBadge category={issue.category} />}
                           <span className="text-sm text-gray-500">
                             👍 {issue._count?.upvotes || 0}
                           </span>

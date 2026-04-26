@@ -57,12 +57,20 @@ function Navbar() {
 
                 {/* ✅ FIXED ADMIN CHECK */}
                 {user?.role === "ADMIN" && (
-                  <Link
-                    to="/admin"
-                    className="text-red-600 font-semibold hover:text-red-800"
-                  >
-                    Admin
-                  </Link>
+                  <>
+                    <Link
+                      to="/admin"
+                      className="text-red-600 font-semibold hover:text-red-800"
+                    >
+                      Admin
+                    </Link>
+                    <Link
+                      to="/dashboard"
+                      className="text-purple-600 font-semibold hover:text-purple-800"
+                    >
+                      Dashboard
+                    </Link>
+                  </>
                 )}
               </>
             )}

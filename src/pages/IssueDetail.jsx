@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api/axios";
+import CategoryBadge from "../components/CategoryBadge";
 
 function IssueDetail() {
   const { id } = useParams();
@@ -45,6 +46,12 @@ function IssueDetail() {
     }
   };
 
+  const statusColors = {
+    OPEN: 'bg-yellow-100 text-yellow-800',
+    IN_PROGRESS: 'bg-blue-100 text-blue-800',
+    RESOLVED: 'bg-green-100 text-green-800',
+  };
+
   if (!issue) return <p className="text-center mt-10">Loading...</p>;
 
   return (
@@ -68,9 +75,23 @@ function IssueDetail() {
             <h2 className="text-lg font-semibold mb-1">
               {issue.title}
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm mb-4">
               {issue.description}
             </p>
+
+            {/* Issue Metadata */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
+                {issue.status || 'OPEN'}
+              </span>
+              {issue.category && <CategoryBadge category={issue.category} />}
+              <span className="text-sm text-gray-500">
+                👤 {issue.user?.name || 'Anonymous'}
+              </span>
+              <span className="text-sm text-gray-500">
+                👍 {issue._count?.upvotes || 0} upvotes
+              </span>
+            </div>
           </div>
         </div>
 

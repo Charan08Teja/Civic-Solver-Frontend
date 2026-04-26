@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
+import CategoryBadge from './CategoryBadge';
 
 const IssueCard = ({ issue, onUpvote }) => {
   const navigate = useNavigate();
@@ -31,9 +32,12 @@ const IssueCard = ({ issue, onUpvote }) => {
           <h2 className="text-xl font-semibold text-gray-900 line-clamp-2">
             {issue.title}
           </h2>
-          <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
-            {issue.status || 'OPEN'}
-          </span>
+          <div className="flex flex-col space-y-2 ml-3">
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
+              {issue.status || 'OPEN'}
+            </span>
+            {issue.category && <CategoryBadge category={issue.category} />}
+          </div>
         </div>
 
         <p className="text-gray-600 text-sm mb-4 line-clamp-3">

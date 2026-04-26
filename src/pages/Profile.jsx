@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import Button from "../components/Button";
+import CategoryBadge from "../components/CategoryBadge";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -173,9 +174,12 @@ function ProfileIssueCard({ issue }) {
           {issue.title}
         </h3>
         <div className="flex items-center justify-between">
-          <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
-            {issue.status || 'OPEN'}
-          </span>
+          <div className="flex flex-col space-y-2">
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[issue.status] || 'bg-gray-100 text-gray-800'}`}>
+              {issue.status || 'OPEN'}
+            </span>
+            {issue.category && <CategoryBadge category={issue.category} />}
+          </div>
           <span className="text-sm text-gray-500">👍 {issue._count?.upvotes || 0}</span>
         </div>
       </div>
