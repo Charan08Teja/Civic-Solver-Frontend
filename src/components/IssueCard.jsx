@@ -9,16 +9,14 @@ const IssueCard = ({ issue, onUpvote }) => {
     OPEN: "bg-yellow-100 text-yellow-800",
     IN_PROGRESS: "bg-blue-100 text-blue-800",
     RESOLVED: "bg-green-100 text-green-800",
+    PENDING: "bg-gray-100 text-gray-800",
   };
 
-  // Backend base URL
-  const BACKEND_URL = "https://civic-solver-backend.onrender.com";
-
-  // Safely build image URL
+  // Smart image URL handling
   const imageSrc = issue.imageUrl
-    ? issue.imageUrl.startsWith("/")
-      ? `${BACKEND_URL}${issue.imageUrl}`
-      : `${BACKEND_URL}/${issue.imageUrl}`
+    ? issue.imageUrl.startsWith("http")
+      ? issue.imageUrl // Cloudinary URL
+      : `https://civic-solver-backend.onrender.com/${issue.imageUrl}` // old local uploads
     : null;
 
   return (
@@ -66,20 +64,18 @@ const IssueCard = ({ issue, onUpvote }) => {
             <span>👤 {issue.user?.name || "Anonymous"}</span>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onUpvote(issue.id);
-              }}
-              className="flex items-center space-x-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
-            >
-              <span>👍</span>
-              <span className="text-sm font-medium">
-                {issue._count?.upvotes || 0}
-              </span>
-            </button>
-          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onUpvote(issue.id);
+            }}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+          >
+            <span>👍</span>
+            <span className="text-sm font-medium">
+              {issue._count?.upvotes || 0}
+            </span>
+          </button>
         </div>
       </div>
     </div>

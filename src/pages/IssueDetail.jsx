@@ -65,8 +65,8 @@ function IssueDetail() {
           {issue.imageUrl && (
   <img
     src={
-      issue.imageUrl.startsWith("/")
-        ? `https://civic-solver-backend.onrender.com${issue.imageUrl}`
+      issue.imageUrl.startsWith("http")
+        ? issue.imageUrl
         : `https://civic-solver-backend.onrender.com/${issue.imageUrl}`
     }
     alt="issue"
