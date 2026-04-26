@@ -172,12 +172,16 @@ function MapView() {
                     <Popup>
                       <div className="max-w-sm">
                         {issue.imageUrl && (
-                          <img
-                            src={`http://localhost:5000/${issue.imageUrl}`}
-                            alt={issue.title}
-                            className="w-full h-32 object-cover rounded-lg mb-3"
-                          />
-                        )}
+  <img
+    src={
+      issue.imageUrl.startsWith("/")
+        ? `https://civic-solver-backend.onrender.com${issue.imageUrl}`
+        : `https://civic-solver-backend.onrender.com/${issue.imageUrl}`
+    }
+    alt={issue.title}
+    className="w-full h-32 object-cover rounded-lg mb-3"
+  />
+)}
                         <h3 className="font-semibold text-gray-900 mb-2">{issue.title}</h3>
                         <p className="text-gray-600 text-sm mb-3">{issue.description}</p>
                         <div className="flex flex-wrap items-center gap-2 mb-2">

@@ -63,12 +63,16 @@ function IssueDetail() {
           
           {/* 🖼️ FULL IMAGE */}
           {issue.imageUrl && (
-            <img
-              src={`http://localhost:5000/${issue.imageUrl}`}
-              alt="issue"
-              className="w-full max-h-[500px] object-contain bg-black"
-            />
-          )}
+  <img
+    src={
+      issue.imageUrl.startsWith("/")
+        ? `https://civic-solver-backend.onrender.com${issue.imageUrl}`
+        : `https://civic-solver-backend.onrender.com/${issue.imageUrl}`
+    }
+    alt="issue"
+    className="w-full max-h-[500px] object-contain bg-black"
+  />
+)}
 
           {/* Content */}
           <div className="p-4">

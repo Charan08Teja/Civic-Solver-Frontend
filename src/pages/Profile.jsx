@@ -157,16 +157,20 @@ function ProfileIssueCard({ issue }) {
     >
       {/* Image */}
       {issue.imageUrl ? (
-        <img
-          src={`http://localhost:5000/${issue.imageUrl}`}
-          alt="issue"
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
-        />
-      ) : (
-        <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-          <span className="text-gray-500 text-4xl">📷</span>
-        </div>
-      )}
+  <img
+    src={
+      issue.imageUrl.startsWith("/")
+        ? `https://civic-solver-backend.onrender.com${issue.imageUrl}`
+        : `https://civic-solver-backend.onrender.com/${issue.imageUrl}`
+    }
+    alt="issue"
+    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
+  />
+) : (
+  <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+    <span className="text-gray-500 text-4xl">📷</span>
+  </div>
+)}
 
       {/* Content */}
       <div className="p-4">
