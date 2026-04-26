@@ -48,7 +48,7 @@ function IssueDetail() {
   if (!issue) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center">
+    <div className="bg-blue-50 min-h-screen flex justify-center">
       <div className="w-full max-w-xl p-4">
         
         {/* 🧾 Issue Card */}

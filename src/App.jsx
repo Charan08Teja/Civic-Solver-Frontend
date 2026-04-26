@@ -6,6 +6,8 @@ import IssueDetail from "./pages/IssueDetail";
 import CreateIssue from "./pages/CreateIssue";
 import Notifications from "./pages/Notifications";
 import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
+import MapView from "./pages/MapView";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -14,17 +16,17 @@ function App() {
       {/* ✅ Navbar on top */}
       <Navbar />
 
-      <div className="p-5">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/issue/:id" element={<IssueDetail />} />
-          <Route path="/create" element={<CreateIssue />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/issue/:id" element={<IssueDetail />} />
+        <Route path="/create" element={<CreateIssue />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/map" element={<MapView />} />
+      </Routes>
     </BrowserRouter>
   );
 }
