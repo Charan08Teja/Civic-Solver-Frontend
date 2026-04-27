@@ -1,16 +1,148 @@
-# React + Vite
+# Civic Solver Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Civic Solver is a community-driven civic issue reporting platform where citizens can report local issues such as potholes, garbage, water leakage, street light problems, and more.
 
-Currently, two official plugins are available:
+This is the frontend application built using React, Vite, Tailwind CSS, and Leaflet.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Demo
 
-## React Compiler
+Frontend: [https://civic-solver-frontend.vercel.app](https://civic-solver-frontend.vercel.app)
+Backend API: [https://civic-solver-backend.onrender.com](https://civic-solver-backend.onrender.com)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* User Authentication (Register/Login)
+* Email OTP Verification
+* Create Civic Issues
+* Upload Issue Images
+* Cloudinary Image Storage
+* Location-based Issue Reporting
+* Interactive Map View
+* Issue Categories (AI-based classification)
+* Upvote Issues
+* Comment System
+* Delete Comments
+* Real-time Notifications
+* User Profile Page
+* Admin Panel
+* Admin Dashboard
+* Filter Issues by Status
+* Responsive UI
+
+---
+
+## Tech Stack
+
+### Core
+
+* React.js
+* Vite
+* React Router DOM
+* Axios
+* Tailwind CSS
+
+### Maps
+
+* Leaflet
+* React Leaflet
+* react-leaflet-cluster
+
+### Real-time
+
+* Socket.IO Client
+
+---
+
+## Project Structure
+
+src/
+│── api/
+│── components/
+│── pages/
+│── App.jsx
+│── main.jsx
+
+---
+
+## Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/Charan08Teja/civic-solver-frontend.git
+```
+
+Go into project:
+
+```bash
+cd civic-solver-frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run development server:
+
+```bash
+npm run dev
+```
+
+---
+
+## Environment Variables
+
+Create `.env` file:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+For production:
+
+```env
+VITE_API_URL=https://civic-solver-backend.onrender.com/api
+```
+
+---
+
+## Pages
+
+* Home
+* Login
+* Register
+* Create Issue
+* Issue Details
+* Profile
+* Notifications
+* Map View
+* Admin Panel
+* Dashboard
+
+---
+
+## Deployment
+
+Frontend deployed on:
+
+* Vercel
+
+---
+
+## Future Improvements
+
+* Search and Filter
+* Issue Resolution Timeline
+* Better Analytics Dashboard
+* Push Notifications
+* Dark Mode
+
+---
+
+## Author
+
+Charan
