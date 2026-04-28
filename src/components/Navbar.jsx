@@ -35,13 +35,35 @@ function Navbar() {
     fetchUser();
   }, [token]);
 
+  const formatNotificationSender = (notification) => {
+    return (
+      notification.sender?.name ||
+      notification.user?.name ||
+      notification.from?.name ||
+      notification.actor?.name ||
+      "Someone"
+    );
+  };
+
+  const formatNotificationText = (notification) => {
+    return (
+      notification.message ||
+      notification.text ||
+      notification.body ||
+      notification.description ||
+      notification.title ||
+      "You have a new notification"
+    );
+  };
+
   useEffect(() => {
     const fetchNotifications = async () => {
       if (token) {
         try {
           const res = await API.get("/notifications");
-          setNotifications(res.data);
-          setUnreadCount(res.data.filter(n => !n.read).length);
+          const notificationData = res.data?.notifications ?? res.data ?? [];
+          setNotifications(notificationData);
+          setUnreadCount(notificationData.filter((n) => !n.read).length);
         } catch (error) {
           console.error("Failed to fetch notifications:", error);
         }
@@ -148,8 +170,10 @@ function Navbar() {
                       notifications.slice(0, 5).map((notif) => (
                         <DropdownMenuItem key={notif.id} className="p-3">
                           <div className="flex flex-col gap-1">
-                            <p className="text-sm">{notif.message}</p>
-                            <p className="text-xs text-gray-500">{new Date(notif.createdAt).toLocaleDateString()}</p>
+                            <p className="text-sm text-gray-900 dark:text-white">{formatNotificationText(notif)}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {formatNotificationSender(notif)} · {notif.createdAt ? new Date(notif.createdAt).toLocaleDateString() : "Just now"}
+                            </p>
                           </div>
                         </DropdownMenuItem>
                       ))

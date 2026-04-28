@@ -128,68 +128,82 @@ function Register() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-blue-50">
+    <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4 py-10 dark:bg-slate-950">
       {step === "register" ? (
         // ===== REGISTRATION FORM =====
         <form
           onSubmit={handleRegister}
-          className="bg-white p-6 rounded-xl shadow-md w-80"
+          className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-200 p-8 sm:p-10"
         >
-          <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
+            <p className="text-sm text-gray-600">Join Civic Solver to report issues and track progress.</p>
+          </div>
 
           {error && (
-            <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+            <div className="mb-4 rounded-2xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-sm text-green-700">
+            <div className="mb-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
               {success}
             </div>
           )}
 
-          <input
-            type="text"
-            placeholder="Name"
-            className="w-full p-2 mb-3 border rounded"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <input
+                type="text"
+                placeholder="Your full name"
+                className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-2"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 mb-3 border rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-2"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-2 mb-4 border rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input
+                type="password"
+                placeholder="Create a secure password"
+                className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-2"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 disabled:bg-green-400"
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-2xl bg-green-600 px-4 py-3 text-white text-sm font-semibold shadow-sm transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+            >
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </div>
 
-          <div className="text-center mt-4">
-            <span className="text-gray-600">Already have an account? </span>
+          <div className="mt-6 text-center text-sm text-gray-600">
+            <span>Already have an account? </span>
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="text-green-600 hover:text-green-800 hover:underline font-medium transition-colors duration-200"
+              className="font-medium text-green-600 hover:text-green-800 transition-colors"
             >
               Login
             </button>
@@ -199,74 +213,70 @@ function Register() {
         // ===== OTP VERIFICATION FORM =====
         <form
           onSubmit={handleVerifyOtp}
-          className="bg-white p-6 rounded-xl shadow-md w-80"
+          className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-200 p-8 sm:p-10"
         >
-          <h2 className="text-2xl font-bold mb-2 text-center">Verify Email</h2>
-          <p className="text-center text-gray-600 text-sm mb-4">
-            Enter the 6-digit code sent to {email}
-          </p>
+          <div className="mb-6 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Verify your email</h2>
+            <p className="text-sm text-gray-600">
+              Enter the 6-digit code sent to <span className="font-medium text-gray-900">{email || "your email"}</span>
+            </p>
+          </div>
 
           {error && (
-            <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+            <div className="mb-4 rounded-2xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-sm text-green-700">
+            <div className="mb-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
               {success}
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              disabled
-              className="w-full p-2 mb-4 border rounded bg-gray-100 text-gray-600 cursor-not-allowed"
-            />
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                disabled
+                className="w-full rounded-2xl border border-gray-300 bg-gray-100 px-4 py-3 text-gray-600 cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">OTP Code</label>
+              <input
+                type="text"
+                value={otp}
+                onChange={handleOtpChange}
+                placeholder="123456"
+                maxLength={6}
+                className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-center text-2xl tracking-[0.3em] text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-2"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-white text-sm font-semibold shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+            >
+              {loading ? "Verifying..." : "Verify OTP"}
+            </button>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">OTP Code</label>
-            <input
-              type="text"
-              value={otp}
-              onChange={handleOtpChange}
-              placeholder="123456"
-              maxLength={6}
-              className="w-full p-2 mb-4 border rounded text-center text-2xl tracking-widest"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 mb-3"
-          >
-            {loading ? "Verifying..." : "Verify OTP"}
-          </button>
-
-          <div className="text-center text-sm text-gray-600 mb-4">
-            <p className="mb-2">Didn't receive the code?</p>
+          <div className="mt-6 text-center text-sm text-gray-600">
+            <p className="mb-2">Didn’t receive the code?</p>
             <button
               type="button"
               onClick={handleResendOtp}
               disabled={resendLoading || countdown > 0}
-              className="text-blue-600 hover:text-blue-800 disabled:text-gray-400 font-medium transition-colors duration-200"
+              className="font-medium text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:hover:text-gray-400"
             >
-              {resendLoading ? "Resending..." : countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
+              {resendLoading ? "Resending..." : countdown > 0 ? `Resend OTP in ${countdown}s` : "Resend OTP"}
             </button>
           </div>
-
-          <button
-            type="button"
-            onClick={handleBackToRegister}
-            className="w-full text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200 text-sm"
-          >
-            Back to Registration
-          </button>
         </form>
       )}
     </div>
