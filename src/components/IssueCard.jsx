@@ -1,15 +1,26 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Heart, MapPin, User, Calendar } from "lucide-react";
 import CategoryBadge from "./CategoryBadge";
+import { Card, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
 
 const IssueCard = ({ issue, onUpvote }) => {
   const navigate = useNavigate();
 
   const statusColors = {
-    OPEN: "bg-yellow-100 text-yellow-800",
-    IN_PROGRESS: "bg-blue-100 text-blue-800",
-    RESOLVED: "bg-green-100 text-green-800",
-    PENDING: "bg-gray-100 text-gray-800",
+    OPEN: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    IN_PROGRESS: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    RESOLVED: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    PENDING: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
+  };
+
+  const statusLabels = {
+    OPEN: "Open",
+    IN_PROGRESS: "In Progress",
+    RESOLVED: "Resolved",
+    PENDING: "Pending",
   };
 
   // Smart image URL handling
@@ -20,65 +31,100 @@ const IssueCard = ({ issue, onUpvote }) => {
     : null;
 
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
       onClick={() => navigate(`/issue/${issue.id}`)}
-      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden border border-gray-200"
+      className="cursor-pointer"
     >
-      {/* Image */}
-      {imageSrc && (
-        <img
-          src={imageSrc}
-          alt="issue"
-          className="w-full h-48 object-cover"
-        />
-      )}
+      <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800">
+        {/* Image with overlay */}
+        <div className="relative h-48 overflow-hidden">
+          {imageSrc ? (
+            <>
+              <img
+                src={imageSrc}
+                alt="issue"
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            </>
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+              <MapPin className="h-12 w-12 text-gray-400" />
+            </div>
+          )}
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <h2 className="text-xl font-semibold text-gray-900 line-clamp-2">
+          {/* Status Badge */}
+          <div className="absolute top-3 right-3">
+            <span
+              className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${
+                statusColors[issue.status] || "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+              }`}
+            >
+              {statusLabels[issue.status] || "Open"}
+            </span>
+          </div>
+
+          {/* Category Badge */}
+          {issue.category && (
+            <div className="absolute top-3 left-3">
+              <CategoryBadge category={issue.category} />
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <CardContent className="p-6">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 line-clamp-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             {issue.title}
           </h2>
 
-          <div className="flex flex-col space-y-2 ml-3">
-            <span
-              className={`px-2 py-1 text-xs font-medium rounded-full ${
-                statusColors[issue.status] || "bg-gray-100 text-gray-800"
-              }`}
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+            {issue.description}
+          </p>
+
+          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <div className="flex items-center gap-1">
+              <User className="h-4 w-4" />
+              <span>{issue.user?.name || "Anonymous"}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(issue.createdAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          {/* Upvote Button */}
+          <div className="flex justify-end">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {issue.status || "OPEN"}
-            </span>
-
-            {issue.category && (
-              <CategoryBadge category={issue.category} />
-            )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUpvote(issue.id);
+                }}
+                className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:border-red-800 dark:hover:text-red-400 transition-colors"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Heart className="h-4 w-4" />
+                </motion.div>
+                <span className="font-medium">
+                  {issue._count?.upvotes || 0}
+                </span>
+              </Button>
+            </motion.div>
           </div>
-        </div>
-
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {issue.description}
-        </p>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <span>👤 {issue.user?.name || "Anonymous"}</span>
-          </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onUpvote(issue.id);
-            }}
-            className="flex items-center space-x-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
-          >
-            <span>👍</span>
-            <span className="text-sm font-medium">
-              {issue._count?.upvotes || 0}
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 
