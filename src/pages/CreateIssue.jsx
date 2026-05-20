@@ -153,7 +153,7 @@ function CreateIssue() {
 
       toast.success("Issue created successfully!", { id: submitToast });
       navigate("/");
-    } catch (error) {
+} catch (error) {
 
   console.log("FULL ERROR:", error);
 
@@ -162,15 +162,28 @@ function CreateIssue() {
     error.response?.data
   );
 
-  const backendError =
-    error.response?.data?.error ||
-    error.response?.data?.message ||
-    error.message;
+  let backendError = "Failed to create issue";
 
-  toast.error(
-    backendError || "Failed to create issue",
-    { id: submitToast }
-  );
+  if (typeof error.response?.data === "string") {
+
+    backendError = error.response.data;
+
+  } else if (error.response?.data?.error) {
+
+    backendError = error.response.data.error;
+
+  } else if (error.response?.data?.message) {
+
+    backendError = error.response.data.message;
+
+  } else if (error.message) {
+
+    backendError = error.message;
+  }
+
+  toast.error(backendError, {
+    id: submitToast
+  });
 
     } finally {
       setLoading(false);
