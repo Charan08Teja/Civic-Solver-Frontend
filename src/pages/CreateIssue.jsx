@@ -154,7 +154,24 @@ function CreateIssue() {
       toast.success("Issue created successfully!", { id: submitToast });
       navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create issue", { id: submitToast });
+
+  console.log("FULL ERROR:", error);
+
+  console.log(
+    "BACKEND RESPONSE:",
+    error.response?.data
+  );
+
+  const backendError =
+    error.response?.data?.error ||
+    error.response?.data?.message ||
+    error.message;
+
+  toast.error(
+    backendError || "Failed to create issue",
+    { id: submitToast }
+  );
+
     } finally {
       setLoading(false);
     }
